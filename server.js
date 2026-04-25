@@ -32,7 +32,7 @@ app.get('/', (req, res) => res.send('OK'));
 // 📥 Get all dishes
 app.get('/dishes', async (req, res) => {
   const dishes = await Dish.find();
-  res.json(dishes.map(d => d.name));
+  res.json(dishes);
 });
 
 // ➕ Add dish
@@ -49,6 +49,15 @@ app.post('/dishes', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to add dish' });
+  }
+});
+
+app.delete('/dishes/:id', async (req, res) => {
+  try {
+    await Dish.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
